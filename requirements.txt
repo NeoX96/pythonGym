@@ -1,0 +1,4 @@
+# ###### Requirements ######
+numpy
+opencv-python
+mediapipe
