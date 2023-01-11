@@ -1,42 +1,49 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-
-# For webcam input:
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
+# Initialisiere Webcam
 cap = cv2.VideoCapture(0)
 
-# Calculate angle between two points
+
+# Zählvariablen für Curl-Übung
+counter = 0 
+stage = None
+
+
+# Berechne Winkel zwischen zwei Punkten
 def calculate_angle(a,b,c):
     a = np.array(a) # First
     b = np.array(b) # Mid
     c = np.array(c) # End
     
-    # Get the dot product and the lengths of the two vectors
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
-
-    # Get the angle in degrees and return it
     angle = np.abs(radians*180.0/np.pi)
     
-    # If angle > 180, then angle = 360 - angle
     if angle >180.0:
         angle = 360-angle
         
     return angle 
 
 
-## Setup mediapipe instance
+
+# Initialisiere mediapipe-Instanz
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
         ret, frame = cap.read()
         
-        # flip the image
-        image = cv2.flip(frame, 1)
+        # Konvertiere Bild in RGB
+        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
       
-        # Make detection
+        # Führe Erkennung durch
         results = pose.process(image)
+    
+        # Konvertiere Bild wieder in BGR
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        
         
         # Extract landmarks
         try:
@@ -56,19 +63,44 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                                 )
             
+            # Curl counter logic
+            if angle > 150:
+                stage = "up"
+            if angle < 40 and stage =='up':
+                stage="down"
+                counter +=1
+                print(counter)
+                       
         except:
             pass
         
+        # Render curl counter
+        # Setup status box
+        cv2.rectangle(image, (0,0), (260,75), (250,120,2, 128), -1)
 
+
+        # Rep data
+        cv2.putText(image, 'wdh', (15,12), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+        cv2.putText(image, str(counter), 
+                    (10,60), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
+        
+        # Stage data
+        cv2.putText(image, 'arm', (120,12), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+        cv2.putText(image, stage, 
+                    (100,60), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
+        
+        
         # Render detections
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
-                                 )        
-
-               
+                                 )               
         
-        cv2.imshow('Gym App', image)
+        cv2.imshow('Mediapipe Feed', image)
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
