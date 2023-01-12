@@ -1,11 +1,8 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-
-# Importiere calculate_angle Funktion
-import sys
-sys.path.append("..")
 from angle import calculate_angle
+
 
 def curl():
     mp_drawing = mp.solutions.drawing_utils
