@@ -30,8 +30,7 @@ def curl():
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-            # flip image
-            image = cv2.flip(image, 1)
+           
             
             
             # Extract landmarks
