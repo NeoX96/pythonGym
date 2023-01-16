@@ -29,6 +29,9 @@ def curl():
             # Konvertiere Bild wieder in BGR
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+            # flip image
+            image = cv2.flip(image, 1)
             
             
             # Extract landmarks
@@ -71,7 +74,7 @@ def curl():
             cv2.putText(image, str(counter), 
                         (10,60), 
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA),
-            cv2.putText(image, 'Curls', (120,12), 
+            cv2.putText(image, 'Curls', (300,15), 
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
 
             
