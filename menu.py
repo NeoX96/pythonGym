@@ -11,7 +11,13 @@ with mp_hands.Hands(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as hands:
   while cap.isOpened():
+
+
     success, image = cap.read()
+
+    # flip image
+    image = cv2.flip(image, 1)
+
     if not success:
       print("Ignoring empty camera frame.")
       # If loading a video, use 'break' instead of 'continue'.
