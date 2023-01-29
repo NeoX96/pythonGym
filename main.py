@@ -2,22 +2,25 @@ import time
 import cv2 
 import mediapipe as mp
 from menu import menu
-# from exercises.curls import curl
-
+from exercises.curls import curl
+from angle import calculate_angle
 
 state = 0
-
 
 
 cap = cv2.VideoCapture(0)
 currentFinger = 0
 fingerCount = 0
-with mp.solutions.hands.Hands( model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
+
+# Zählvariablen für Curl-Übung
+left_counter = 0 
+right_counter = 0
+
+with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
     with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4) as pose:
         
-
         
-          while cap.isOpened():
+        while cap.isOpened():
             success, image = cap.read()
 
             if not success:
@@ -82,7 +85,10 @@ with mp.solutions.hands.Hands( model_complexity=0, min_detection_confidence=0.5,
 
 
                     if state == 0:
-                        menu(image, hand_landmarks)
+                        menu(image, hand_landmarks, fingerCount)
+
+            if state == 1:
+                curl(image, resultsPose, left_counter, right_counter)
 
         # Display image
             cv2.imshow('MediaPipe Hands', image)
