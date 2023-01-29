@@ -11,7 +11,7 @@ currentFinger = 0
 
 
 # For webcam input:
-def menu(image, hand_landmarks):
+def menu(image, hand_landmarks, fingerCount):
     
   # Draw hand landmarks 
   mp_drawing.draw_landmarks(
@@ -21,6 +21,6 @@ def menu(image, hand_landmarks):
     mp_drawing_styles.get_default_hand_landmarks_style(),
     mp_drawing_styles.get_default_hand_connections_style())
 
-  # Display finger count
-  # cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
 
+  # Display finger count
+  cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
