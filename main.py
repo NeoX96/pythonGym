@@ -5,7 +5,7 @@ from menu import menu
 from exercises.curls import curl
 from angle import calculate_angle
 
-state = 0
+state = 1
 
 
 cap = cv2.VideoCapture(0)
@@ -16,19 +16,21 @@ fingerCount = 0
 left_counter = 0 
 right_counter = 0
 
+left_stage = 0
+right_stage = 0
+
 with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
     with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4) as pose:
         
-        
         while cap.isOpened():
-            success, image = cap.read()
+            success, frame = cap.read()
 
             if not success:
                 print("Ignoring empty camera frame.")
                 break
 
             # Konvertiere Bild in RGB
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # flip image
             image = cv2.flip(image, 1)
@@ -88,7 +90,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                         menu(image, hand_landmarks, fingerCount)
 
             if state == 1:
-                curl(image, resultsPose, left_counter, right_counter)
+                curl(image, resultsPose, left_counter, right_counter, calculate_angle, left_stage, right_stage)
 
         # Display image
             cv2.imshow('MediaPipe Hands', image)
