@@ -6,7 +6,7 @@ from exercises.curls import curl
 from angle import calculate_angle
 
 state = 1
-
+start_time = time.time()
 
 cap = cv2.VideoCapture(0)
 currentFinger = 0
@@ -18,6 +18,7 @@ right_counter = 0
 
 left_stage = 0
 right_stage = 0
+
 
 with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
     with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4) as pose:
@@ -43,23 +44,21 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-            if state == 0:
-                if currentFinger != fingerCount:
-                    currentFinger = fingerCount
-                    print("Finger count: ", fingerCount)
+            if currentFinger != fingerCount:
+                currentFinger = fingerCount
+                print("Finger count: ", fingerCount)
 
             # Reset finger count
             fingerCount = 0
+            
 
             if resultsHands.multi_hand_landmarks:
-
+                
                 for hand_landmarks in resultsHands.multi_hand_landmarks:
+                    handLandmarks = []
                     # Get hand index to check label (left or right)
                     handIndex = resultsHands.multi_hand_landmarks.index(hand_landmarks)
                     handLabel = resultsHands.multi_handedness[handIndex].classification[0].label
-
-                    # Set variable to keep landmarks positions (x and y)
-                    handLandmarks = []
 
                     # Fill list with x and y positions of each landmark
                     for landmarks in hand_landmarks.landmark:
@@ -85,12 +84,49 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     if handLandmarks[20][1] < handLandmarks[18][1]:     #Pinky
                         fingerCount = fingerCount+1
 
-
+                    # Wenn state = 0 ist, wird das Hand Tracking angezeigt
                     if state == 0:
-                        menu(image, hand_landmarks, fingerCount)
+                        menu(image, hand_landmarks)
+            
+            # wenn 10 Finger oder 1 Finger erkannt werden, wird die Zeit gestoppt und angezeigt
+            if currentFinger == 10 or currentFinger == 1:
+                passedTime = time.time() - start_time
 
+                # Zeit wird nur angezeigt, wenn sie kleiner als 3 Sekunden ist
+                if passedTime < 3:
+                    cv2.putText(image, str(round(passedTime, 1)), (400, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
+
+                # wenn 10 Finger erkannt werden, wird der state auf 1 gesetzt
+                if time.time() - start_time > 3 and currentFinger == 10:
+                    state = 0
+                
+                # wenn 1 Finger erkannt werden, wird der state auf 1 gesetzt
+                if time.time() - start_time > 3 and currentFinger == 1:
+                    state = 1
+
+            # wenn keine Finger erkannt werden, wird die Zeit zurückgesetzt
+            else:
+                start_time = time.time()
+
+            
+            # Auruf der Übungen
+            if state == 0:
+                # Display finger count
+                cv2.putText(image, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
+            
+            # Aufruf der Curl-Übung
             if state == 1:
                 curl(image, resultsPose, left_counter, right_counter, calculate_angle, left_stage, right_stage)
+            
+            # Aufruf der Situps-Übung
+            if state == 2:
+                pass
+
+            # Aufruf der Squats-Übung
+            if state == 3:
+                pass
+            
+            
 
         # Display image
             cv2.imshow('MediaPipe Hands', image)
