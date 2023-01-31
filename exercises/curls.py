@@ -4,9 +4,18 @@ import mediapipe as mp                  # Mediapipe
 import numpy as np                      # Numpy 
 
 
+# Zählvariablen für Curl-Übung
+left_counter = 0 
+right_counter = 0
+
+left_stage = None
+right_stage = None
+
 # Funktion für Curl-Übung die in main.py aufgerufen wird
-def curl(image, results, left_counter, right_counter, calculate_angle, left_stage, right_stage):
+def curl(image, results, calculate_angle):
     
+    global left_counter, right_counter, left_stage, right_stage
+
     # Mediapipe Pose
     mp_pose = mp.solutions.pose
 

@@ -5,19 +5,12 @@ from menu import menu
 from exercises.curls import curl
 from angle import calculate_angle
 
-state = 1
+state = 0
 start_time = time.time()
 
 cap = cv2.VideoCapture(0)
 currentFinger = 0
 fingerCount = 0
-
-# Zählvariablen für Curl-Übung
-left_counter = 0 
-right_counter = 0
-
-left_stage = 0
-right_stage = 0
 
 
 with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
@@ -116,7 +109,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             
             # Aufruf der Curl-Übung
             if state == 1:
-                curl(image, resultsPose, left_counter, right_counter, calculate_angle, left_stage, right_stage)
+                curl(image, resultsPose, calculate_angle)
+                
             
             # Aufruf der Situps-Übung
             if state == 2:
