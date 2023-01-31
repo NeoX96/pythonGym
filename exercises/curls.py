@@ -12,7 +12,7 @@ left_stage = None
 right_stage = None
 
 # Funktion für Curl-Übung die in main.py aufgerufen wird
-def curl(image, results, calculate_angle):
+def curl(image, results, calculate_angle, width, height):
     
     global left_counter, right_counter, left_stage, right_stage
 
@@ -38,7 +38,7 @@ def curl(image, results, calculate_angle):
 
         # Zeigt Winkel am linken Ellbogen an
         cv2.putText(image, str(round(left_angle,1)), 
-                    tuple(np.multiply(left_elbow, [640, 480]).astype(int)), 
+                    tuple(np.multiply(left_elbow, [width, height]).astype(int)), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
         
         # Speichert Koordinaten für rechte Seite
@@ -51,7 +51,7 @@ def curl(image, results, calculate_angle):
 
         # Zeigt Winkel am rechten Ellbogen an
         cv2.putText(image, str(round(right_angle,1)), 
-                    tuple(np.multiply(right_elbow, [640, 480]).astype(int)), 
+                    tuple(np.multiply(right_elbow, [width, height]).astype(int)), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
         
         # Zählt Curls wenn Winkel größer als 150 Grad und kleiner als 40 Grad ist und der Zustand "up" ist
@@ -77,36 +77,36 @@ def curl(image, results, calculate_angle):
     # Erkennung erfolgreich
     try:
         # Zeigt linien auf linke Seite
-        cv2.line(image, tuple(np.multiply(left_shoulder, [640, 480]).astype(int)), 
-                tuple(np.multiply(left_elbow, [640, 480]).astype(int)), (255, 255, 255), 2)
-        cv2.line(image, tuple(np.multiply(left_elbow, [640, 480]).astype(int)),
-                tuple(np.multiply(left_wrist, [640, 480]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(left_shoulder, [width, height]).astype(int)), 
+                tuple(np.multiply(left_elbow, [width, height]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(left_elbow, [width, height]).astype(int)),
+                tuple(np.multiply(left_wrist, [width, height]).astype(int)), (255, 255, 255), 2)
 
         # Zeigt linien auf rechte Seite
-        cv2.line(image, tuple(np.multiply(right_shoulder, [640, 480]).astype(int)),
-            tuple(np.multiply(right_elbow, [640, 480]).astype(int)), (255, 255, 255), 2)
-        cv2.line(image, tuple(np.multiply(right_elbow, [640, 480]).astype(int)),
-            tuple(np.multiply(right_wrist, [640, 480]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(right_shoulder, [width, height]).astype(int)),
+            tuple(np.multiply(right_elbow, [width, height]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(right_elbow, [width, height]).astype(int)),
+            tuple(np.multiply(right_wrist, [width, height]).astype(int)), (255, 255, 255), 2)
 
         # Zeigt Anweisung auf linker Seite an 
         cv2.putText(image, str(left_stage), 
-            tuple(np.multiply(left_elbow, [640, 550]).astype(int)), 
+            tuple(np.multiply(left_elbow, [width, height+80]).astype(int)), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA) 
 
         # Zeigt Anweisung auf rechter Seite an
         cv2.putText(image, str(right_stage), 
-            tuple(np.multiply(right_elbow, [640, 550]).astype(int)), 
+            tuple(np.multiply(right_elbow, [width, height+80]).astype(int)), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
 
                 
         # Zeigt Counter für linke Seite an
         cv2.putText(image, str(left_counter),
-            tuple(np.multiply(left_shoulder, [700, 450]).astype(int)), 
+            tuple(np.multiply(left_shoulder, [width+100, height-70]).astype(int)), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
 
         # Zeigt Counter für rechte Seite an
         cv2.putText(image, str(right_counter),
-            tuple(np.multiply(right_shoulder, [400, 450]).astype(int)), 
+            tuple(np.multiply(right_shoulder, [width-250, height-70]).astype(int)), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
                 
     # Erkennung nicht erfolgreich
