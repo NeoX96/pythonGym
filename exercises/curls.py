@@ -20,8 +20,8 @@ def curl(image, results, calculate_angle, width, height):
     mp_pose = mp.solutions.pose
 
     # Zeigt Name der Übung an
-    cv2.putText(image, 'Curls', (300,25), 
-    cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+    cv2.putText(image, 'Curls', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
+    cv2.putText(image, 'Curls', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
 
 
     # Erkennung erfolgreich 

@@ -106,8 +106,11 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     state = 0
                 
                 # wenn 1 Finger erkannt werden, wird der state auf 1 gesetzt
-                if time.time() - start_time > 3 and currentFinger == 1:
-                    state = 1
+                if currentFinger == 1:
+                    cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    if time.time() - start_time > 3:
+                        state = 1
 
             # wenn keine Finger erkannt werden, wird die Zeit zurückgesetzt
             else:
