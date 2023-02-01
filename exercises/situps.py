@@ -1,41 +1,44 @@
 import cv2                              # OpenCV 
 import mediapipe as mp                  # Mediapipe
 import numpy as np                      # Numpy 
-import time
 
 # Lade das Video
-cap = cv2.VideoCapture("exercises\pexels-rodnae-productions-8401327.mp4")
+# cap = cv2.VideoCapture("exercises\pexels-rodnae-productions-8401327.mp4")
+# 
+# 
+# start_time = cv2.getTickCount()
+# 
+# while True:
+#     ret, frame = cap.read()
+#     if not ret:
+#         break
+# 
+#     elapsed_time = (cv2.getTickCount() - start_time) / cv2.getTickFrequency()
+#     if elapsed_time > 3:
+#         break
+#     
+# 
+#     #Zeitanzeige 3 Sekunden 
+#     font = cv2.FONT_HERSHEY_SIMPLEX
+#     text = ' {:.0f} sec'.format(elapsed_time)
+#     cv2.putText(frame, text, (frame.shape[1]//2, frame.shape[0]//2), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
+#     
+#     cv2.imshow("Video", frame)
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+# 
+# 
+# cv2.imshow('Mediapipe Situp Feed', image)
+# time.sleep(3)
 
-
-start_time = cv2.getTickCount()
-
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    elapsed_time = (cv2.getTickCount() - start_time) / cv2.getTickFrequency()
-    if elapsed_time > 3:
-        break
-    
-
-    #Zeitanzeige 3 Sekunden 
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    text = ' {:.0f} sec'.format(elapsed_time)
-    cv2.putText(frame, text, (frame.shape[1]//2, frame.shape[0]//2), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
-    
-    cv2.imshow("Video", frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-
-cv2.imshow('Mediapipe Situp Feed', image)
-time.sleep(3)
-
-
+left_angle = 0
+right_angle = 0
+left_counter = 0
 
 # Function for situp exercise that is called in main.py
-def situp():
+def situp(calculate_angle):
+
+    global left_angle, right_angle, left_counter
 
    
     # Initialize mediapipe modules
@@ -78,18 +81,21 @@ def situp():
                 shoulder_right = landmarks[6]
                 hip_left = landmarks[11]
                 hip_right = landmarks[12]
+                knee_left = landmarks[13]
                 
 
                 # Berechne den Winkel zwischen Schultern und Hüfte
-                angle = np.arctan2(shoulder_right.y - shoulder_left.y,
-                                    shoulder_right.x - shoulder_left.x) - np.arctan2(hip_right.y - hip_left.y,
-                                                                                    hip_right.x - hip_left.x)
-                angle = angle * 180 / np.pi
+                angle = calculate_angle(shoulder_left, hip_left, knee_left)
 
                 # Zeige den Rückenwinkel auf dem Bild an
                 cv2.putText(image, "Rueckenwinkel: {:.2f}°".format(angle), (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
 
+                if left_angle > 170:
+                    left_stage = "up"
+                if left_angle < 100  and left_stage == "up":
+                    left_stage = "down"
+                    left_counter +=1
 
                     
                 if angle > 100 and angle < 30 :
