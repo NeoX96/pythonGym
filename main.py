@@ -95,8 +95,13 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                         menu(image, hand_landmarks)
             
             # wenn 10 Finger oder 1 Finger erkannt werden, wird die Zeit gestoppt und angezeigt
-            if currentFinger == 10 and state == 1 or currentFinger == 1 or currentFinger == 2 and state == 0 :
+            if currentFinger == 10 and state > 0 or currentFinger > 0 and state == 0:
                 passedTime = time.time() - start_time
+
+                # wenn sich finger ändern, wird die Zeit zurückgesetzt
+                if currentFinger != fingerCount:
+                    start_time = time.time()
+                    passedTime = 0
 
                 # Zeit wird nur angezeigt, wenn sie kleiner als 3 Sekunden ist
                 if passedTime < 3:
@@ -107,14 +112,14 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     state = 0
                 
                 # wenn 1 Finger erkannt werden, wird der state auf 1 gesetzt
-                if currentFinger == 1:
+                if currentFinger == 1 and state == 0:
                     cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
                     if time.time() - start_time > 3:
                         state = 1
 
                 # wenn 2 Finger erkannt werden, wird der state auf 2 gesetzt
-                if currentFinger == 2:
+                if currentFinger == 2 and state == 0:
                     cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
                     if time.time() - start_time > 3:
