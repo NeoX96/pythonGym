@@ -31,96 +31,97 @@ import numpy as np                      # Numpy
 # cv2.imshow('Mediapipe Situp Feed', image)
 # time.sleep(3)
 
-left_angle = 0
-right_angle = 0
-left_counter = 0
+# Zählvariablen für Curl-Übung
+left_counter_situps = 0 
+right_counter_situps = 0
+stage_situps = None
+
+# Counter variables for situp exercise
+situp_count = 0
 
 # Function for situp exercise that is called in main.py
-def situp(calculate_angle):
+def situp(image, resultsPose, calculate_angle, width, height):
 
-    global left_angle, right_angle, left_counter
+    global stage_situps, left_counter_situps, right_counter_situps, situp_count
 
-   
-    # Initialize mediapipe modules
+    # Mediapipe Pose
     mp_pose = mp.solutions.pose
 
-    # Initialize webcam
-    cap = cv2.VideoCapture(0)
+    # Zeigt Name der Übung an
+    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
+    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
     
 
-    # Counter variables for situp exercise
-    situp_count = 0
 
-  
+    try:
+        landmarks = resultsPose.pose_landmarks.landmark
 
+        
+        # Speichert Koordinaten für linke Seite
+        left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+        left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+        left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
 
+        # Speichert Koordinaten für rechte Seite
+        right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+        right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+        right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
 
-    # Initialize mediapipe instance
-    # min_detection_confidence: Minimum value for the probability in percent that a landmark was detected
-    # min_tracking_confidence: Minimum value for the probability in percent that a landmark was detected
-    with mp_pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4) as pose:
-        while cap.isOpened():
-            ret, frame = cap.read() 
+        
+        # Berechne den Winkel linke Seite
+        left_angle_situps = calculate_angle(left_shoulder, left_hip, left_knee)
 
-            # Convert image to RGB
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-            # Flip image
-            image = cv2.flip(image, 1)
-
-            # Perform detection
-            results = pose.process(image)
-
-            # Convert image back to BGR
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            
-            try:
-                landmarks = results.pose_landmarks.landmark
-                shoulder_left = landmarks[5]
-                shoulder_right = landmarks[6]
-                hip_left = landmarks[11]
-                hip_right = landmarks[12]
-                knee_left = landmarks[13]
-                
-
-                # Berechne den Winkel zwischen Schultern und Hüfte
-                angle = calculate_angle(shoulder_left, hip_left, knee_left)
-
-                # Zeige den Rückenwinkel auf dem Bild an
-                cv2.putText(image, "Rueckenwinkel: {:.2f}°".format(angle), (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        # Berechne den Winkel rechte Seite
+        right_angle_situps = calculate_angle(right_shoulder, right_hip, right_knee)
 
 
-                if left_angle > 170:
-                    left_stage = "up"
-                if left_angle < 100  and left_stage == "up":
-                    left_stage = "down"
-                    left_counter +=1
+        # logik für Linke seite
+        if left_angle_situps > 175:
+            stage_situps = "up"
+        if left_angle_situps < 115  and stage_situps == "up":
+            stage_situps = "down"
+            situp_count += 1
 
-                    
-                if angle > 100 and angle < 30 :
-                    cv2.putText(image, 'SITUP', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
-                    situp_count += 1
-                    cv2.putText(image, "Correct", (500, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                else:
-                    cv2.putText(image, 'SITUP', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
-                    cv2.putText(image, "Incorrect", (500, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-            except:
-                pass
-
+        # logik für rechte Seite
+        #
+        #
+        #
+        #
 
             
-            
-            cv2.putText(image, "Count: {}".format(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-            cv2.imshow('Mediapipe Situp Feed', image)
-            
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
-    cap.release()
-    cv2.destroyAllWindows()
+        # wenn Winkel über 100 und unter 30 ist, dann ist die Übung korrekt, ansonsten falsch
+        if left_angle_situps > 100 and left_angle_situps < 30 :
+            cv2.putText(image, "Correct", (500, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        else:
+            cv2.putText(image, "Incorrect", (500, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
 
-# macht situp() ausführbar wenn nur dieses file ausgeführt wird
-if __name__ == '__main__':
-    situp()
+    except:
+        pass
+    
+
+    try: 
+        # Zeichnet die Wiederholungen
+        cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        # Zeichnet die Stages
+        cv2.putText(image, "Stage: " + str(stage_situps), (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        # Zeichnet die Winkel für linke Seite
+        cv2.putText(image, str(left_angle_situps),
+            tuple(np.multiply(left_hip, [width+100, height-70]).astype(int)),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
+        
+
+        # Zeichnet lininen für linke Seite 
+        cv2.line(image, tuple(np.multiply(left_shoulder, [width, height]).astype(int)),
+            tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(left_knee, [width, height]).astype(int)),
+            tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
+        
+        # Zeichnet roten punkt auf hip für linke Seite
+        cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+
+
+    except:
+        pass

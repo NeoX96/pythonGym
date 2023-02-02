@@ -3,6 +3,7 @@ import cv2
 import mediapipe as mp
 from menu import menu
 from exercises.curls import curl
+from exercises.situps import situp
 from angle import calculate_angle
 
 state = 0
@@ -121,15 +122,15 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             if state == 0:
                 # Display finger count
                 cv2.putText(image, str(fingerCount), (50, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
-            
+
+
             # Aufruf der Curl-Übung
             if state == 1:
                 curl(image, resultsPose, calculate_angle, width, height)
-                
             
             # Aufruf der Situps-Übung
             if state == 2:
-                pass
+                situp(image, resultsPose, calculate_angle, width, height)
 
             # Aufruf der Squats-Übung
             if state == 3:
