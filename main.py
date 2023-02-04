@@ -4,6 +4,7 @@ import mediapipe as mp
 from menu import menu
 from exercises.curls import curl
 from exercises.situps import situp
+from exercises.squats import squats
 from angle import calculate_angle
 
 state = 0
@@ -14,21 +15,34 @@ fingerCount = 0
 # Video Capture
 cap = cv2.VideoCapture(0)
 
+
 # liest die Breite und Höhe der Kamera
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+desired_width = int(height * 16 / 9)
+if desired_width > width:
+    width = desired_width
+    height = int(width * 9 / 16)
+else:
+    height = int(width * 9 / 16)
+    width = desired_width
 
 # setzt die Breite und Höhe der Kamera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 
+
+
+
 # initialisiert Mediapipe Hands und Pose
 with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
-    with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4) as pose:
+    with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4, static_image_mode=False, smooth_landmarks=True, model_complexity=2) as pose:
         
         # Starte Video Capture Loop
         while cap.isOpened():
+
             # success ist True, wenn ein Bild gelesen werden kann, frame enthält das Bild
             success, frame = cap.read()
 
@@ -37,6 +51,9 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                 cv2.putText(frame, "No image", (int(width/2), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
                 break
 
+            # Skaliere das Frame auf eine bestimmte Größe
+            frame = cv2.resize(frame, (width, height))
+            
             # Konvertiere Bild in RGB
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -50,19 +67,22 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             # Konvertiere Bild wieder in BGR
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
+            mp_pose = mp.solutions.pose
+
             if currentFinger != fingerCount:
                 currentFinger = fingerCount
                 print("Finger count: ", fingerCount)
 
+            
+
             # Zurücksetzen der Fingeranzahl, da Fingeranzahl ständig erhöht wird, wenn Finger erkannt werden
             fingerCount = 0
-            
+
 
             if resultsHands.multi_hand_landmarks:
                 
                 for hand_landmarks in resultsHands.multi_hand_landmarks:
                     handLandmarks = []
-                    # Get hand index to check label (left or right)
                     handIndex = resultsHands.multi_hand_landmarks.index(hand_landmarks)
                     handLabel = resultsHands.multi_handedness[handIndex].classification[0].label
 
@@ -94,9 +114,11 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     if state == 0:
                         menu(image, hand_landmarks)
             
-            # wenn 10 Finger oder 1 Finger erkannt werden, wird die Zeit gestoppt und angezeigt
-            if currentFinger == 10 and state > 0 or currentFinger > 0 and state == 0:
-                passedTime = time.time() - start_time
+            # vergangene Zeit wird berechnet
+            passedTime = time.time() - start_time
+
+            # 10 Finger und State größer 0 oder 1 - 3 Finger und state 0
+            if (currentFinger == 10 and state > 0) or (1 <= currentFinger <= 3 and state == 0):
 
                 # wenn sich finger ändern, wird die Zeit zurückgesetzt
                 if currentFinger != fingerCount:
@@ -107,23 +129,30 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                 if passedTime < 3:
                     cv2.putText(image, str(round(passedTime, 1)), (int(width/2), 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
 
-                # wenn 10 Finger erkannt werden, wird der state auf 1 gesetzt
-                if time.time() - start_time > 3 and currentFinger == 10:
+                # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
+                if passedTime > 3 and currentFinger == 10:
                     state = 0
-                
-                # wenn 1 Finger erkannt werden, wird der state auf 1 gesetzt
+
+                # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
                     cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-                    if time.time() - start_time > 3:
+                    if passedTime > 3:
                         state = 1
 
-                # wenn 2 Finger erkannt werden, wird der state auf 2 gesetzt
+                # wenn 2 Finger erkannt werden und state = 0 ist
                 if currentFinger == 2 and state == 0:
                     cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
-                    if time.time() - start_time > 3:
+                    if passedTime > 3:
                         state = 2
+
+                # wenn 3 Finger erkannt werden und state = 0 ist
+                if currentFinger == 3 and state == 0:
+                    cv2.putText(image, "Squats", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Squats", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    if passedTime > 3:
+                        state = 3
 
             # wenn keine Finger erkannt werden, wird die Zeit zurückgesetzt
             else:
@@ -135,26 +164,22 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                 # Display finger count
                 cv2.putText(image, str(fingerCount), (50, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
 
-
             # Aufruf der Curl-Übung
             if state == 1:
-                curl(image, resultsPose, calculate_angle, width, height)
+                curl(image, resultsPose, mp_pose, calculate_angle, width, height)
             
             # Aufruf der Situps-Übung
             if state == 2:
-                situp(image, resultsPose, calculate_angle, width, height)
+                situp(image, resultsPose, mp_pose, calculate_angle, width, height)
 
             # Aufruf der Squats-Übung
             if state == 3:
+                squats(image, resultsPose, mp_pose, calculate_angle, width, height)
                 pass
             
-            
-
-        # Display image
-            cv2.imshow('MediaPipe Hands', image)
-        # change windows size to camera resolution
-            
-            
+            # imshow
+            cv2.imshow('PythonGym', image)
+    
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
