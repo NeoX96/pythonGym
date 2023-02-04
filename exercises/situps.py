@@ -1,5 +1,4 @@
 import cv2                              # OpenCV 
-import mediapipe as mp                  # Mediapipe
 import numpy as np                      # Numpy 
 
 # Lade das Video
@@ -40,12 +39,10 @@ stage_situps = None
 situp_count = 0
 
 # Function for situp exercise that is called in main.py
-def situp(image, resultsPose, calculate_angle, width, height):
+def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
     global stage_situps, left_counter_situps, right_counter_situps, situp_count
 
-    # Mediapipe Pose
-    mp_pose = mp.solutions.pose
 
     # Zeigt Name der Übung an
     cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
@@ -76,9 +73,9 @@ def situp(image, resultsPose, calculate_angle, width, height):
 
 
         # logik für Linke seite
-        if left_angle_situps > 175:
+        if left_angle_situps > 100:
             stage_situps = "up"
-        if left_angle_situps < 115  and stage_situps == "up":
+        if left_angle_situps < 30  and stage_situps == "up":
             stage_situps = "down"
             situp_count += 1
 
