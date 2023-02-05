@@ -33,12 +33,10 @@ else:
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-# always ful screen
+
+# öffnet das Fenster in Vollbild und maximiert es
 cv2.namedWindow("PythonGym", cv2.WND_PROP_FULLSCREEN)
-
-# maximiert das Fenster
 cv2.setWindowProperty("PythonGym", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-
 
 
 # initialisiert Mediapipe Hands und Pose
@@ -74,29 +72,28 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
 
             mp_pose = mp.solutions.pose
 
+            # dadruch das fingerCount immer aktualisiert wird, kann man darauf nicht vergleichend
+            # deshalb currentFinger, die nur aktualisiert wird, wenn sich die Fingeranzahl ändert
             if currentFinger != fingerCount:
                 currentFinger = fingerCount
                 print("Finger count: ", fingerCount)
 
-            
-
             # Zurücksetzen der Fingeranzahl, da Fingeranzahl ständig erhöht wird, wenn Finger erkannt werden
             fingerCount = 0
 
-
+            # wenn Hand erkannt wird, werden die Finger gezählt
             if resultsHands.multi_hand_landmarks:
-                
+                # Für jede Hand werden die Landmarks ausgelesen	
                 for hand_landmarks in resultsHands.multi_hand_landmarks:
                     handLandmarks = []
                     handIndex = resultsHands.multi_hand_landmarks.index(hand_landmarks)
                     handLabel = resultsHands.multi_handedness[handIndex].classification[0].label
 
-                    # Fill list with x and y positions of each landmark
+                    # Für jeden Landmark wird der x und y Wert ausgelesen
                     for landmarks in hand_landmarks.landmark:
                         handLandmarks.append([landmarks.x, landmarks.y])
 
-                    # Test conditions for each finger: Count is increased if finger is 
-                    #   considered raised.
+                    # If abfrage für jeden Finger: Zähler wird erhöht, wenn Finger gehoben wird 
                     # Thumb: TIP x position must be greater or lower than IP x position, 
                     #   deppeding on hand label.
                     if handLabel == "Left" and handLandmarks[4][0] > handLandmarks[3][0]:
@@ -178,7 +175,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                 if currentFinger == 5:
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,140,255), 2, cv2.LINE_AA)
-
+                    
                     if passedTime > 3:
                         if state == 1:
                             reset_curls()
@@ -233,10 +230,12 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             # Aufruf der Curl-Übung
             if state == 1:
                 curl(image, resultsPose, mp_pose, calculate_angle, width, height)
+                pass
             
             # Aufruf der Situps-Übung
             if state == 2:
                 situp(image, resultsPose, mp_pose, calculate_angle, width, height)
+                pass
 
             # Aufruf der Squats-Übung
             if state == 3:
