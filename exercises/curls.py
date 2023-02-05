@@ -4,16 +4,26 @@ import numpy as np                      # Numpy
 
 
 # Zählvariablen für Curl-Übung
-left_counter = 0 
-right_counter = 0
+left_counter_curls = 0 
+right_counter_curls = 0
 
-left_stage = None
-right_stage = None
+left_stage_curls = None
+right_stage_curls = None
+
+# Zurücksetzen der Zählvariablen für Curl-Übung
+def reset_curls():
+    global left_counter_curls, right_counter_curls, left_stage_curls, right_stage_curls
+    
+    left_counter_curls = 0 
+    right_counter_curls = 0
+    left_stage_curls = None
+    right_stage_curls = None
+
 
 # Funktion für Curl-Übung die in main.py aufgerufen wird
 def curl(image, results, mp_pose, calculate_angle, width, height):
     
-    global left_counter, right_counter, left_stage, right_stage
+    global left_counter_curls, right_counter_curls, left_stage_curls, right_stage_curls
 
 
     # Zeigt Name der Übung an
@@ -60,17 +70,17 @@ def curl(image, results, mp_pose, calculate_angle, width, height):
         # Zählt Curls wenn Winkel größer als 150 Grad und kleiner als 40 Grad ist und der Zustand "up" ist
         # linke Seite
         if left_angle > 140:
-            left_stage = "up"
-        if left_angle < 50  and left_stage == "up":
-            left_stage = "down"
-            left_counter +=1
+            left_stage_curls = "up"
+        if left_angle < 50  and left_stage_curls == "up":
+            left_stage_curls = "down"
+            left_counter_curls +=1
 
         # rechte Seite
         if right_angle > 150:
-            right_stage = "up"
-        if right_angle < 40 and right_stage == "up":
-            right_stage = "down"
-            right_counter +=1
+            right_stage_curls = "up"
+        if right_angle < 40 and right_stage_curls == "up":
+            right_stage_curls = "down"
+            right_counter_curls +=1
 
         right_bar_height = int(height * (1 - left_angle / 200))
         left_bar_height = int(height * (1 - right_angle / 200))
@@ -96,37 +106,37 @@ def curl(image, results, mp_pose, calculate_angle, width, height):
 
 
         # Zeigt Anweisung auf linker Seite an 
-        cv2.putText(image, str(left_stage),
+        cv2.putText(image, str(left_stage_curls),
             tuple(np.multiply(left_elbow, [width-100, height+80]).astype(int)),
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(left_stage), 
+        cv2.putText(image, str(left_stage_curls), 
             tuple(np.multiply(left_elbow, [width-100, height+80]).astype(int)), 
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,0), 1, cv2.LINE_AA) 
 
 
         # Zeigt Anweisung auf rechter Seite an
-        cv2.putText(image, str(right_stage),
+        cv2.putText(image, str(right_stage_curls),
             tuple(np.multiply(right_elbow, [width-100, height+80]).astype(int)),
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(right_stage), 
+        cv2.putText(image, str(right_stage_curls), 
             tuple(np.multiply(right_elbow, [width-100, height+80]).astype(int)), 
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,0), 1, cv2.LINE_AA)
 
                 
         # Zeigt Counter für linke Seite an
-        cv2.putText(image, str(left_counter),
+        cv2.putText(image, str(left_counter_curls),
             tuple(np.multiply(left_shoulder, [width+100, height-70]).astype(int)),
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(left_counter),
+        cv2.putText(image, str(left_counter_curls),
             tuple(np.multiply(left_shoulder, [width+100, height-70]).astype(int)), 
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,255), 2, cv2.LINE_AA)
         
         
         # Zeigt Counter für rechte Seite an
-        cv2.putText(image, str(right_counter),
+        cv2.putText(image, str(right_counter_curls),
             tuple(np.multiply(right_shoulder, [width-250, height-70]).astype(int)),
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(right_counter),
+        cv2.putText(image, str(right_counter_curls),
             tuple(np.multiply(right_shoulder, [width-250, height-70]).astype(int)), 
             cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,255), 2, cv2.LINE_AA)
         
