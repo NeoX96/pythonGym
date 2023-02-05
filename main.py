@@ -170,7 +170,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                             cv2.destroyAllWindows()
                             break
 
-                # wenn in Übung 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
+                # wenn in Übung - 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
                 if currentFinger == 5:
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,140,255), 2, cv2.LINE_AA)
