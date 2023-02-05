@@ -152,6 +152,10 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (0, 255, 0), -1)
                     cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/3)), height), (0, 255, 0), -1)
 
+                    # set timer text in the middle of the bar 3 - passed time
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 3, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1, cv2.LINE_AA)
+
 
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if currentFinger == 10:
@@ -174,6 +178,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                 if currentFinger == 5:
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
                     cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,140,255), 2, cv2.LINE_AA)
+
                     if passedTime > 3:
                         if state == 1:
                             reset_curls()
