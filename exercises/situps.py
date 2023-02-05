@@ -38,6 +38,13 @@ stage_situps = None
 # Counter variables for situp exercise
 situp_count = 0
 
+def reset_situps():
+    global left_counter_situps, right_counter_situps, stage_situps, situp_count
+    left_counter_situps = 0 
+    right_counter_situps = 0
+    stage_situps = None
+    situp_count = 0
+
 # Function for situp exercise that is called in main.py
 def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 

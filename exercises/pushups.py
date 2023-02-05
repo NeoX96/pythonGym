@@ -6,6 +6,12 @@ pushups_counter = 0
 stage_pushups = None
 invalid = False
 
+def reset_pushups():
+    global pushups_counter, stage_pushups, invalid
+    pushups_counter = 0
+    stage_pushups = None
+    invalid = False
+
 
 def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
     global pushups_counter, stage_pushups, invalid

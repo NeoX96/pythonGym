@@ -3,9 +3,9 @@ import cv2
 import mediapipe as mp
 from menu import menu
 from exercises.curls import curl, reset_curls
-from exercises.situps import situp
-from exercises.squats import squats
-from exercises.pushups import pushups
+from exercises.situps import situp, reset_situps
+from exercises.squats import squats, reset_squats
+from exercises.pushups import pushups, reset_pushups
 from angle import calculate_angle
 
 state = 0
@@ -177,6 +177,15 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     if passedTime > 3:
                         if state == 1:
                             reset_curls()
+
+                        if state == 2:
+                            reset_situps()
+
+                        if state == 3:
+                            reset_pushups()
+                        
+                        if state == 4:
+                            reset_squats()
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:

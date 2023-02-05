@@ -4,7 +4,10 @@ import cv2
 squats_counter = 0
 stage_squats = None
 
-
+def reset_squats():
+    global squats_counter, stage_squats
+    squats_counter = 0
+    stage_squats = None
 
 def squats(image, resultsPose, mp_pose, calculate_angle, width, height):
 
