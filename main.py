@@ -35,6 +35,9 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 # always ful screen
 cv2.namedWindow("PythonGym", cv2.WND_PROP_FULLSCREEN)
 
+# maximiert das Fenster
+cv2.setWindowProperty("PythonGym", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
 
 
 # initialisiert Mediapipe Hands und Pose
@@ -118,17 +121,17 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             # vergangene Zeit wird berechnet
             passedTime = time.time() - start_time
 
-            # 10 Finger und State größer 0 (wenn in Übung kann zurück zum Hauptmenü gewechselt werden)
+            # 10 Finger (wenn in Übung kann zurück zum Hauptmenü gewechselt werden oder im Hauptmenü kann Anwendung beendet werden)
             # oder 1-3 Finger und State = 0 (wenn im Hauptmenü kann Übung gewählt werden)
             # oder 5 Finger und State größer 0 (wenn in Übung kann Reset gewählt werden)
-            if (currentFinger == 10 and state > 0) or (1 <= currentFinger <= 3 and state == 0) or (currentFinger == 5 and state > 0):
+            if (currentFinger == 10) or (1 <= currentFinger <= 3 and state == 0) or (currentFinger == 5 and state > 0):
 
                 # wenn sich finger ändern, wird die Zeit zurückgesetzt
                 if currentFinger != fingerCount:
                     start_time = time.time()
                     passedTime = 0
 
-                # Zeit wird nur angezeigt, wenn sie kleiner als 3 Sekunden ist
+                # Animation er Zeit (3 Sekunden Zeit zum Auswählen)
                 if passedTime < 3:
                     # Breite des Balkens
                     bar_width = int(width/3)
@@ -143,23 +146,33 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                     # Vollständigen Balken zeichnen (rote Farbe)
                     cv2.rectangle(image, (x1, bar_y), (x2, height), (0, 0, 255), -1)
 
-                    # Zeichne einen gefüllten, runden Balken (grüne Farbe)
-                    cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (0, 255, 0), -1)
-
+                    # Zeichne einen Kreis, um die eckige Form des Balkens zu verdecken (grüne Farbe)
                     # Balken zeichnen, der die verstrichene Zeit darstellt (grüne Farbe)
+                    cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (0, 255, 0), -1)
                     cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/3)), height), (0, 255, 0), -1)
 
 
-
-
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
-                if passedTime > 3 and currentFinger == 10:
-                    state = 0
+                if currentFinger == 10:
+                    if state > 0:
+                        cv2.putText(image, "Back", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        if passedTime > 3:
+                            state = 0
+                            passedTime = 0
+                            start_time = time.time()
+                    if state == 0:
+                        cv2.putText(image, "Exit", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Exit", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        if passedTime > 3:
+                            cap.release()
+                            cv2.destroyAllWindows()
+                            break
 
                 # wenn in Übung 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
                 if currentFinger == 5:
-                    cv2.putText(image, "Reset", (int(width/2), 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Reset", (int(width/2), 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         if state == 1:
                             reset_curls()
@@ -212,6 +225,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             cv2.imshow('PythonGym', image)
     
             if cv2.waitKey(1) & 0xFF == ord('q'):
+                cap.release()
+                cv2.destroyAllWindows()
                 break
 
 
