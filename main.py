@@ -184,10 +184,10 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                             reset_situps()
 
                         if state == 3:
-                            reset_pushups()
+                            reset_squats()
                         
                         if state == 4:
-                            reset_squats()
+                            reset_situps()
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
