@@ -1,6 +1,4 @@
 import cv2
-import mediapipe as mp
-import numpy as np
 
 # counter variables for squat exercise
 squats_counter = 0

@@ -1,6 +1,5 @@
 import cv2
-import mediapipe as mp
-import numpy as np
+
 
 # counter variables for pushups exercise
 pushups_counter = 0
