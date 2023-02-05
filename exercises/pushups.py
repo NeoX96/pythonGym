@@ -1,5 +1,5 @@
 import cv2
-
+import numpy as np
 
 # counter variables for pushups exercise
 pushups_counter = 0
@@ -54,38 +54,39 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
         pass
 
     try:
-        # draw lines for pushups exercise
-        cv2.line(image, (shoulder[0], shoulder[1]), (elbow[0], elbow[1]), (0, 255, 0), 2)
-        cv2.line(image, (elbow[0], elbow[1]), (wrist[0], wrist[1]), (0, 255, 0), 2)
-        cv2.line(image, (hip[0], hip[1]), (knee[0], knee[1]), (0, 255, 0), 2)
-        cv2.line(image, (knee[0], knee[1]), (ankle[0], ankle[1]), (0, 255, 0), 2)
-
-        # draw circles for pushups exercise
-        cv2.circle(image, (shoulder[0], shoulder[1]), 5, (0, 0, 255), cv2.FILLED)
-        cv2.circle(image, (elbow[0], elbow[1]), 5, (0, 0, 255), cv2.FILLED)
-        cv2.circle(image, (wrist[0], wrist[1]), 5, (0, 0, 255), cv2.FILLED)
-        cv2.circle(image, (hip[0], hip[1]), 5, (0, 0, 255), cv2.FILLED)
-        cv2.circle(image, (knee[0], knee[1]), 5, (0, 0, 255), cv2.FILLED)
-        cv2.circle(image, (ankle[0], ankle[1]), 5, (0, 0, 255), cv2.FILLED)
-
-        # draw pushups counter on shoulder
-        cv2.putText(image, str(pushups_counter), (shoulder[0], shoulder[1]), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(pushups_counter), (shoulder[0], shoulder[1]), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-
-        # draw invalid or valid on the left side
-        if invalid == True:
-            cv2.putText(image, "INVALID", (int(width/2)-200, 60), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
-            cv2.putText(image, "INVALID", (int(width/2)-200, 60), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-        else:
-            cv2.putText(image, "VALID", (int(width/2)-200, 60), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
-            cv2.putText(image, "VALID", (int(width/2)-200, 60), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 0), 1, cv2.LINE_AA)
+        # zeichne linien für pushups exercise
+        cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 
+                tuple(np.multiply(elbow, [width, height]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(elbow, [width, height]).astype(int)),
+                tuple(np.multiply(wrist, [width, height]).astype(int)), (255, 255, 255), 2)
         
-        # draw all angles on the body parts
-        cv2.putText(image, str(int(angle_elbow)), (elbow[0], elbow[1]), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-        cv2.putText(image, str(int(angle_knee)), (knee[0], knee[1]), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-        cv2.putText(image, str(int(angle_hip)), (hip[0], hip[1]), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
-
+        cv2.line(image, tuple(np.multiply(hip, [width, height]).astype(int)),
+                tuple(np.multiply(knee, [width, height]).astype(int)), (255, 255, 255), 2)
+        cv2.line(image, tuple(np.multiply(knee, [width, height]).astype(int)),
+                tuple(np.multiply(ankle, [width, height]).astype(int)), (255, 255, 255), 2)
         
+        # zeichne Kreise für pushups exercise
+        cv2.circle(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+        cv2.circle(image, tuple(np.multiply(elbow, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+        cv2.circle(image, tuple(np.multiply(wrist, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+        
+        cv2.circle(image, tuple(np.multiply(hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+        cv2.circle(image, tuple(np.multiply(knee, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+        cv2.circle(image, tuple(np.multiply(ankle, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+
+        # zeichne Kreise für pushups exercise
+        cv2.putText(image, str(int(angle_elbow)), tuple(np.multiply(elbow, [width, height]).astype(int)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(image, str(int(angle_knee)), tuple(np.multiply(knee, [width, height]).astype(int)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(image, str(int(angle_hip)), tuple(np.multiply(hip, [width, height]).astype(int)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        # Pushups Counter Text
+        cv2.putText(image, str(pushups_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(image, str(pushups_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 1, cv2.LINE_AA)
+
+
 
         
     except:

@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 # counter variables for squat exercise
 squats_counter = 0
