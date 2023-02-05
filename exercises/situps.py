@@ -44,9 +44,9 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
     global stage_situps, left_counter_situps, right_counter_situps, situp_count
 
 
-    # Zeigt Name der Übung an
-    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
-    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+    # Zeigt Name mittig oben an
+    cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+    cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
     
 
 
