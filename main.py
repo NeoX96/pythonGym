@@ -40,8 +40,8 @@ cv2.setWindowProperty("PythonGym", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREE
 
 
 # initialisiert Mediapipe Hands und Pose
-with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
-    with mp.solutions.pose.Pose(min_detection_confidence=0.4, min_tracking_confidence=0.4, static_image_mode=False, smooth_landmarks=True, model_complexity=2) as pose:
+with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confidence=0.6, model_complexity=1) as hands:
+    with mp.solutions.pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, static_image_mode=False, smooth_landmarks=True, model_complexity=1, enable_segmentation=False) as pose:
         
         # Starte Video Capture Loop
         while cap.isOpened():
@@ -187,7 +187,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
                             reset_squats()
                         
                         if state == 4:
-                            reset_situps()
+                            reset_pushups()
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
