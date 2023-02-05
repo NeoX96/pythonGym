@@ -5,6 +5,7 @@ from menu import menu
 from exercises.curls import curl, reset_curls
 from exercises.situps import situp
 from exercises.squats import squats
+from exercises.pushups import pushups
 from angle import calculate_angle
 
 state = 0
