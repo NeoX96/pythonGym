@@ -130,11 +130,26 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
 
                 # Zeit wird nur angezeigt, wenn sie kleiner als 3 Sekunden ist
                 if passedTime < 3:
+                    # Breite des Balkens
                     bar_width = int(width/3)
+
+                    # Koordinaten für linke und rechte Seite des Balkens
                     x1 = int(width/2 - bar_width/2)
                     x2 = int(width/2 + bar_width/2)
-                    cv2.rectangle(image, (x1, 0), (x2, 20), (0, 0, 255), -1)
-                    cv2.rectangle(image, (x1, 0), (x1 + int(bar_width*(passedTime/3)), 20), (0, 255, 0), -1)
+
+                    # Y-Koordinate für die obere Kante des Balkens
+                    bar_y = height - 20
+
+                    # Vollständigen Balken zeichnen (rote Farbe)
+                    cv2.rectangle(image, (x1, bar_y), (x2, height), (0, 0, 255), -1)
+
+                    # Zeichne einen gefüllten, runden Balken (grüne Farbe)
+                    cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (0, 255, 0), -1)
+
+                    # Balken zeichnen, der die verstrichene Zeit darstellt (grüne Farbe)
+                    cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/3)), height), (0, 255, 0), -1)
+
+
 
 
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
@@ -143,8 +158,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
 
                 # wenn in Übung 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
                 if currentFinger == 5:
-                    cv2.putText(image, "Reset", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Reset", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (int(width/2), 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (int(width/2), 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         if state == 1:
                             reset_curls()
