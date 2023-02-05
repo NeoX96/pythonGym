@@ -45,10 +45,10 @@ def curl(image, results, mp_pose, calculate_angle, width, height):
 
         # Zeigt Winkel am linken Ellbogen an
         cv2.putText(image, str(round(left_angle,1)), 
-                    tuple(np.multiply(left_elbow, [width, height]).astype(int)), 
+                    tuple(np.multiply(left_elbow, [width+25, height]).astype(int)), 
                     cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
         cv2.putText(image, str(round(left_angle,1)), 
-                    tuple(np.multiply(left_elbow, [width, height]).astype(int)), 
+                    tuple(np.multiply(left_elbow, [width+25, height]).astype(int)), 
                     cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         
         # Speichert Koordinaten für rechte Seite
@@ -61,10 +61,10 @@ def curl(image, results, mp_pose, calculate_angle, width, height):
 
         # Zeigt Winkel am rechten Ellbogen an
         cv2.putText(image, str(round(right_angle,1)), 
-                    tuple(np.multiply(right_elbow, [width, height]).astype(int)), 
+                    tuple(np.multiply(right_elbow, [width+25, height]).astype(int)), 
                     cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
         cv2.putText(image, str(round(right_angle,1)), 
-                    tuple(np.multiply(right_elbow, [width, height]).astype(int)), 
+                    tuple(np.multiply(right_elbow, [width+25, height]).astype(int)), 
                     cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         
         # Zählt Curls wenn Winkel größer als 150 Grad und kleiner als 40 Grad ist und der Zustand "up" ist
