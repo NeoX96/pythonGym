@@ -1,6 +1,6 @@
 import numpy as np
 
-# Berechne Winkel zwischen zwei Punkten
+# Berechne Winkel zwischen drei Punkten - mittlerer Punkt ist der Winkel
 def calculate_angle(a,b,c):
     a = np.array(a) # First
     b = np.array(b) # Mid
