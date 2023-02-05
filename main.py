@@ -2,7 +2,7 @@ import time
 import cv2 
 import mediapipe as mp
 from menu import menu
-from exercises.curls import curl
+from exercises.curls import curl, reset_curls
 from exercises.situps import situp
 from exercises.squats import squats
 from angle import calculate_angle
@@ -32,7 +32,8 @@ else:
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-
+# always ful screen
+cv2.namedWindow("PythonGym", cv2.WND_PROP_FULLSCREEN)
 
 
 
@@ -117,8 +118,10 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
             # vergangene Zeit wird berechnet
             passedTime = time.time() - start_time
 
-            # 10 Finger und State größer 0 oder 1 - 3 Finger und state 0
-            if (currentFinger == 10 and state > 0) or (1 <= currentFinger <= 3 and state == 0):
+            # 10 Finger und State größer 0 (wenn in Übung kann zurück zum Hauptmenü gewechselt werden)
+            # oder 1-3 Finger und State = 0 (wenn im Hauptmenü kann Übung gewählt werden)
+            # oder 5 Finger und State größer 0 (wenn in Übung kann Reset gewählt werden)
+            if (currentFinger == 10 and state > 0) or (1 <= currentFinger <= 3 and state == 0) or (currentFinger == 5 and state > 0):
 
                 # wenn sich finger ändern, wird die Zeit zurückgesetzt
                 if currentFinger != fingerCount:
@@ -127,11 +130,24 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confide
 
                 # Zeit wird nur angezeigt, wenn sie kleiner als 3 Sekunden ist
                 if passedTime < 3:
-                    cv2.putText(image, str(round(passedTime, 1)), (int(width/2), 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
+                    bar_width = int(width/3)
+                    x1 = int(width/2 - bar_width/2)
+                    x2 = int(width/2 + bar_width/2)
+                    cv2.rectangle(image, (x1, 0), (x2, 20), (0, 0, 255), -1)
+                    cv2.rectangle(image, (x1, 0), (x1 + int(bar_width*(passedTime/3)), 20), (0, 255, 0), -1)
+
 
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if passedTime > 3 and currentFinger == 10:
                     state = 0
+
+                # wenn in Übung 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
+                if currentFinger == 5:
+                    cv2.putText(image, "Reset", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    if passedTime > 3:
+                        if state == 1:
+                            reset_curls()
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
