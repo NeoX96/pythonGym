@@ -9,6 +9,7 @@ invalid = False
 
 
 def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
+    global pushups_counter, stage_pushups, invalid
 
     # Zeigt Name mittig oben an
     cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
@@ -33,7 +34,7 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
         # logic for invalid pushups exercise, only use angle knee and hip for invalid
         if angle_knee < 170 or angle_hip < 170:
             invalid = True
-        else
+        else:
             invalid = False
 
 
@@ -43,6 +44,9 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
         if angle_elbow > 100 and invalid == False and stage_pushups == "down":
             stage_pushups = "up"
             pushups_counter += 1
+
+    except:
+        pass
 
     try:
         # draw lines for pushups exercise
