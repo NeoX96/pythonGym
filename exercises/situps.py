@@ -1,5 +1,6 @@
 import cv2                              # OpenCV 
 import numpy as np                      # Numpy 
+import time 
 
 
 #Lade das Video
@@ -40,6 +41,8 @@ stage_situps = None
 
 #Zähler variable
 situp_count = 0
+video_cap = cv2.VideoCapture("exercises\preview\situps.mp4")
+state_video_situp = False
 
 def reset_situps():
     global left_counter_situps, right_counter_situps, stage_situps, situp_count
@@ -50,13 +53,37 @@ def reset_situps():
 
 #. Funktion für Curl-Übung die in main.py aufgerufen wird
 def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
+    global state_video_situp
+
+    if state_video_situp == False:
+        start_time = time.time()
+        while video_cap.isOpened():
+            ret, frame = video_cap.read()
+            if ret:
+                cv2.imshow("PythonGym", frame)
+
+            elapsed_time = time.time() - start_time
+            elapsed_time = int(round(elapsed_time, 2))
+            cv2.putText(frame, str(elapsed_time), (int(width/2), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+
+
+            # if waitkey oder elapsed time > 3
+            if cv2.waitKey(1) & 0xFF == ord('q') or elapsed_time > 3:
+                video_cap.release()
+                break
+        
+        cv2.imshow("PythonGym", image)
+        video_cap.release()
+
+
 
     global stage_situps, left_counter_situps, right_counter_situps, situp_count
 
 
-    #. Zeigt Name der Übung an
-    cv2.putText(image, 'Situps', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
-    cv2.putText(image, 'Situps', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+    # Zeigt Name mittig oben an
+    cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+    cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
     
  
     #. Erkennung war erfolgreich
@@ -112,11 +139,6 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
             
             situp_count += 1
 
-            
-           
-            
-
-     
     
 
         # logik für rechte Seite
@@ -126,10 +148,6 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
             stage_situps = "down"
          
             situp_count += 1
-      
-      
-            
-      
 
     except:
         pass
