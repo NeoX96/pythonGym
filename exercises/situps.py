@@ -55,8 +55,8 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
     #. Zeigt Name der Übung an
-    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
-    cv2.putText(image, 'Situps', (300,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+    cv2.putText(image, 'Situps', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
+    cv2.putText(image, 'Situps', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
     
  
     #. Erkennung war erfolgreich
@@ -113,7 +113,7 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
             situp_count += 1
 
             
-            left_bar_height1 = int(height * (1 - right_angle / 200))
+           
             
 
      
@@ -128,7 +128,7 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
             situp_count += 1
       
       
-            right_bar_height1 = int(height * (1 - left_angle / 200))
+            
       
 
     except:
