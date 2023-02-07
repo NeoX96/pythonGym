@@ -163,15 +163,15 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if currentFinger == 10:
                     if state > 0:
-                        cv2.putText(image, "Back", (100, int(height/2) + 235), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                        cv2.putText(image, "Back", (100, int(height/2) + 235), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
                         if passedTime > 3:
                             state = 0
                             passedTime = 0
                             start_time = time.time()
                     if state == 0:
-                        cv2.putText(image, "Exit", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                        cv2.putText(image, "Exit", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2, cv2.LINE_AA)
+                        cv2.putText(image, "Exit", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Exit", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2, cv2.LINE_AA)
                         if passedTime > 3:
                             cap.release()
                             cv2.destroyAllWindows()
