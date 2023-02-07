@@ -61,7 +61,7 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
                     stage_pushup = "up"
                     pushup_counter += 1
 
-                if hip_angle < 170:
+                if hip_angle < 150:
                     color = (0,0,255)
                 else:
                     color = (0,255,0)
