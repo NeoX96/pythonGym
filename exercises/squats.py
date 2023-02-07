@@ -53,14 +53,14 @@ def squats(image, resultsPose, mp_pose, calculate_angle, width, height):
                     squats_counter += 1
 
                 # wenn angle_hip kleiner als 120° und angle_knee größer als 160° dann ist die Übung nicht korrekt ausgeführt
-                if angle_hip < 150 and angle_knee > 160:
+                if angle_hip < 165 and angle_knee > 160:
                     color = (0,0,255)
                 else:
                     color = (0,255,0)
 
                 # Zeichne Counter
-                cv2.putText(image, str(squats_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3, cv2.LINE_AA)
-                cv2.putText(image, str(squats_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+                cv2.putText(image, str(squats_counter), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(image, str(squats_counter), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
 
                 # Zeichne Kreise an den Winkel-Punkten die nicht filled sind
                 cv2.circle(image, (int(shoulder[0]*width), int(shoulder[1]*height)), 10, color, cv2.FILLED)

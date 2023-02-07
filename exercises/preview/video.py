@@ -21,7 +21,7 @@ def video_preview(video_cap, image, width, height):
             cv2.putText(frame, str(elapsed_time), (int(width/2), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
             # wenn 5 Sekunden vergangen sind, dann beende die Schleife oder Q drücken
-            if cv2.waitKey(10) & 0xFF == ord('q') or elapsed_time > 5:
+            if cv2.waitKey(15) & 0xFF == ord('q') or elapsed_time > 5:
                 video_cap.release()
                 break
         

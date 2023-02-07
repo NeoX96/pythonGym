@@ -57,22 +57,27 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
                 # Logik für Pushups
                 if elbow_angle > 160:
                     stage_pushup = "down"
-                if elbow_angle < 30 and stage_pushup == "down":
+                if elbow_angle < 90 and stage_pushup == "down":
                     stage_pushup = "up"
-                    pushup_counter += 1   
+                    pushup_counter += 1
+
+                if hip_angle < 170:
+                    color = (0,0,255)
+                else:
+                    color = (0,255,0)
                         
 
                 # Linie zwischen Schulter und Ellenbogen
                 cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 
-                        tuple(np.multiply(elbow, [width, height]).astype(int)), (255, 255, 255), 2)
+                        tuple(np.multiply(elbow, [width, height]).astype(int)), (color), 2)
                 cv2.line(image, tuple(np.multiply(elbow, [width, height]).astype(int)),
-                        tuple(np.multiply(wrist, [width, height]).astype(int)), (255, 255, 255), 2)
+                        tuple(np.multiply(wrist, [width, height]).astype(int)), (color), 2)
                 
                 # Linie zwischen Schulter und Hüfte
                 cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)),
-                        tuple(np.multiply(hip, [width, height]).astype(int)), (255, 255, 255), 2)
+                        tuple(np.multiply(hip, [width, height]).astype(int)), (color), 2)
                 cv2.line(image, tuple(np.multiply(hip, [width, height]).astype(int)),
-                        tuple(np.multiply(knee, [width, height]).astype(int)), (255, 255, 255), 2)
+                        tuple(np.multiply(knee, [width, height]).astype(int)), (color), 2)
                 
                 cv2.circle(image, tuple(np.multiply(elbow, [width, height]).astype(int)), 5, (0, 0, 255), -1)
                 cv2.circle(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 5, (0, 0, 255), -1)
