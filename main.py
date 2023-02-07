@@ -150,16 +150,16 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
 
                     # Zeichne einen Kreis, um die eckige Form des Balkens zu verdecken (türkis Farbe)
                     # Balken zeichnen, der die verstrichene Zeit darstellt (türkis Farbe)
-                    #cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (255, 255, 0), -1)
-                    cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/2)), height), (255, 255, 0), -1)
+                    cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y+15), 15, (255, 255, 0), -1)
+                    cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/3)), height), (255, 255, 0), -1)
 
                     # set timer text in the middle of the bar 3 - passed time
-                    cv2.putText(image, str(int(3.5 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, str(int(3.5 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 3, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
 
-                    # schwarze Balken 
-                    cv2.rectangle(image, (width - bar_width, height - 30), (width, height), (0, 0, 0), -1)
-                    cv2.rectangle(image, (width - bar_width*4, height - 30), (width - bar_width*2, height), (0, 0, 0), -1)
+                    # Zeichne schwarze Balken links und rechts vom weißen Balken
+                    cv2.rectangle(image, (0, bar_y), (x1, height), (0, 0, 0), -1)
+                    cv2.rectangle(image, (x2, bar_y), (width, height), (0, 0, 0), -1)
 
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if currentFinger == 10:
