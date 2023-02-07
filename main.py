@@ -252,7 +252,7 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
             
             # imshow
             if state == 0:
-                overlay = cv2.resize(overlay, (image.shape[1], image.shape[0]))
+                overlay = cv2.resize(overlay, (width, height))
                 combined_image = cv2.addWeighted(image, 0.2, overlay, 1, 0)
                 if combined_image is not None:
                     cv2.imshow('PythonGym', combined_image)
