@@ -50,7 +50,7 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
             landmarks = resultsPose.pose_landmarks.landmark
 
             # wenn Knie zu 50% sicher erkennbar sind
-            if landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].visibility > 0.5 or landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].visibility > 0.5:
+            if landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].visibility > 0.5 and landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].visibility > 0.5:
 
                 # Speichert Koordinaten für linke Seite
                 left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
