@@ -13,7 +13,6 @@ start_time = time.time()
 currentFinger = 0
 fingerCount = 0
 combined_image = None
-overlay = None
 
 
 # Video Capture
@@ -45,7 +44,7 @@ cv2.setWindowProperty("PythonGym", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREE
 
 # initialisiert Mediapipe Hands und Pose
 with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confidence=0.6, model_complexity=1) as hands:
-    with mp.solutions.pose.Pose(min_detection_confidence=0.6, min_tracking_confidence=0.6, static_image_mode=False, smooth_landmarks=True, model_complexity=1, enable_segmentation=False) as pose:
+    with mp.solutions.pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, static_image_mode=False, smooth_landmarks=True, model_complexity=1, enable_segmentation=False) as pose:
         
         # Starte Video Capture Loop
         while cap.isOpened():
@@ -253,11 +252,10 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
             
             # imshow
             if state == 0:
-                if overlay is not None:
-                    overlay = cv2.resize(overlay, (width, height))
-                    combined_image = cv2.addWeighted(image, 0.2, overlay, 1, 0)
-                    if combined_image is not None:
-                        cv2.imshow('PythonGym', combined_image)
+                overlay = cv2.resize(overlay, (width, height))
+                combined_image = cv2.addWeighted(image, 0.2, overlay, 1, 0)
+                if combined_image is not None:
+                    cv2.imshow('PythonGym', combined_image)
             else:
                 cv2.imshow('PythonGym', image)
     
