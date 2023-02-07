@@ -153,8 +153,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
                     cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/2)), height), (255, 255, 0), -1)
 
                     # set timer text in the middle of the bar 3 - passed time
-                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 3, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.5 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.5 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
 
                     # schwarze Balken 
                     cv2.rectangle(image, (width - bar_width, height - 30), (width, height), (0, 0, 0), -1)
@@ -163,8 +163,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if currentFinger == 10:
                     if state > 0:
-                        cv2.putText(image, "Back", (100,int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                        cv2.putText(image, "Back", (100,int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100, int(height/2) + 235), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100, int(height/2) + 235), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
                         if passedTime > 3:
                             state = 0
                             passedTime = 0

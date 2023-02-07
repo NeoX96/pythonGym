@@ -98,8 +98,8 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
                 cv2.putText(image, stage_pushup, (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
 
             else:
-                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
         except:
             pass

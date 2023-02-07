@@ -38,7 +38,6 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
     # Zeigt Name mittig oben an
-    cv2.rectangle(image, (0, 0), (width, 40), (0, 0, 0), -1)
     cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
     
@@ -136,8 +135,8 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
                 cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (255, 255, 255), -1)
 
             else:
-                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
 
         except:

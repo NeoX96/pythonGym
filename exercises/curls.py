@@ -175,7 +175,9 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                 # Balken für rechte Seite
                 cv2.rectangle(image, (width-75, height-right_bar_height), (width-25, height), (255, 255, 0), -1)
 
-
+            else:
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (40, int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
         # Erkennung nicht erfolgreich
         except:
