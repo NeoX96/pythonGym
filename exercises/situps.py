@@ -38,9 +38,14 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
     # Zeigt Name mittig oben an
+    cv2.rectangle(image, (0, 0), (width, 40), (0, 0, 0), -1)
     cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.putText(image, "Situps", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
     
+
+    
+   
+                                
  
     #. Erkennung war erfolgreich
     if resultsPose.pose_landmarks:
@@ -110,10 +115,10 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
                 # Zeichnet die Wiederholungen
-                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
                 # Zeichnet die Stages
-                cv2.putText(image, "Stage: " + str(stage_situps), (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
                 # Zeichnet die Winkel für linke Seite
                 cv2.putText(image, str(left_angle_situps),
@@ -127,8 +132,8 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
                 cv2.line(image, tuple(np.multiply(left_knee, [width, height]).astype(int)),
                     tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
                 
-                # Zeichnet roten punkt auf hip für linke Seite
-                cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                # Zeichnet punkt auf hip für linke Seite
+                cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (255, 255, 255), -1)
 
             else:
                 cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
