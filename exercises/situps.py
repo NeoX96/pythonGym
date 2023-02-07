@@ -43,94 +43,97 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
     
  
     #. Erkennung war erfolgreich
-
-    try:
-        landmarks = resultsPose.pose_landmarks.landmark
-
-        
-        #. Speichert Koordinaten für linke Seite
-        left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-        left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-        left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
-
-        #. Speichert Koordinaten für rechte Seite
-        right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-        right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-        right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
-
-        
-        #. Berechne den Winkel linke Seite
-        left_angle_situps = calculate_angle(left_shoulder, left_hip, left_knee)
-
-        #. Berechne den Winkel rechte Seite
-        right_angle_situps = calculate_angle(right_shoulder, right_hip, right_knee)
-
-
-
-    
-        #. Zeigt Winkel für Sit-Ups am linken Knie an
-        cv2.putText(image, str(round(left_angle_situps,1)), 
-                    tuple(np.multiply(left_knee, [width, height]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(round(left_angle_situps,1)), 
-                    tuple(np.multiply(left_knee, [width, height]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
-
-
-        #. Zeigt Winkel für Sit-Ups am rechten Knie an
-        cv2.putText(image, str(round(right_angle_situps,1)), 
-                    tuple(np.multiply(right_knee, [width, height]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
-        cv2.putText(image, str(round(right_angle_situps,1)), 
-                    tuple(np.multiply(right_knee, [width, height]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
-
-
-        
-        # logik für Linke seite
-        if left_angle_situps > 100:
-            stage_situps = "up"
-        if left_angle_situps < 40  and stage_situps == "up":
-            stage_situps = "down"
+    if resultsPose.pose_landmarks:
+        try:
+            landmarks = resultsPose.pose_landmarks.landmark
             
-            situp_count += 1
+            # wenn Ellbogen und Knie zu 50% sicher erkennbar sind
+            if landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].visibility > 0.5 and landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility > 0.5 or landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].visibility > 0.5 and landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility > 0.5:
 
-    
+            
+                #. Speichert Koordinaten für linke Seite
+                left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+                left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
 
-        # logik für rechte Seite
-        if right_angle_situps > 100:
-            stage_situps = "up"
-        if right_angle_situps < 30  and stage_situps == "up":
-            stage_situps = "down"
-         
-            situp_count += 1
+                #. Speichert Koordinaten für rechte Seite
+                right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+                right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+                right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
 
-    except:
-        pass
-    
+                
+                #. Berechne den Winkel linke Seite
+                left_angle_situps = calculate_angle(left_shoulder, left_hip, left_knee)
 
-    try: 
-        # Zeichnet die Wiederholungen
-        cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        # Zeichnet die Stages
-        cv2.putText(image, "Stage: " + str(stage_situps), (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        # Zeichnet die Winkel für linke Seite
-        cv2.putText(image, str(left_angle_situps),
-            tuple(np.multiply(left_hip, [width+100, height-70]).astype(int)),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
-        
-
-        # Zeichnet lininen für linke Seite 
-        cv2.line(image, tuple(np.multiply(left_shoulder, [width, height]).astype(int)),
-            tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
-        cv2.line(image, tuple(np.multiply(left_knee, [width, height]).astype(int)),
-            tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
-        
-        # Zeichnet roten punkt auf hip für linke Seite
-        cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                #. Berechne den Winkel rechte Seite
+                right_angle_situps = calculate_angle(right_shoulder, right_hip, right_knee)
 
 
-    except:
-        pass
+
+            
+                #. Zeigt Winkel für Sit-Ups am linken Knie an
+                cv2.putText(image, str(round(left_angle_situps,1)), 
+                            tuple(np.multiply(left_knee, [width, height]).astype(int)), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(image, str(round(left_angle_situps,1)), 
+                            tuple(np.multiply(left_knee, [width, height]).astype(int)), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+
+
+                #. Zeigt Winkel für Sit-Ups am rechten Knie an
+                cv2.putText(image, str(round(right_angle_situps,1)), 
+                            tuple(np.multiply(right_knee, [width, height]).astype(int)), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(image, str(round(right_angle_situps,1)), 
+                            tuple(np.multiply(right_knee, [width, height]).astype(int)), 
+                            cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+
+
+                
+                # logik für Linke seite
+                if left_angle_situps > 100:
+                    stage_situps = "up"
+                if left_angle_situps < 40  and stage_situps == "up":
+                    stage_situps = "down"
+                    
+                    situp_count += 1
+
+            
+
+                # logik für rechte Seite
+                if right_angle_situps > 100:
+                    stage_situps = "up"
+                if right_angle_situps < 30  and stage_situps == "up":
+                    stage_situps = "down"
+                
+                    situp_count += 1
+
+
+                # Zeichnet die Wiederholungen
+                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+                # Zeichnet die Stages
+                cv2.putText(image, "Stage: " + str(stage_situps), (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+                # Zeichnet die Winkel für linke Seite
+                cv2.putText(image, str(left_angle_situps),
+                    tuple(np.multiply(left_hip, [width+100, height-70]).astype(int)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
+                
+
+                # Zeichnet lininen für linke Seite 
+                cv2.line(image, tuple(np.multiply(left_shoulder, [width, height]).astype(int)),
+                    tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
+                cv2.line(image, tuple(np.multiply(left_knee, [width, height]).astype(int)),
+                    tuple(np.multiply(left_hip, [width, height]).astype(int)), (255, 255, 255), 2)
+                
+                # Zeichnet roten punkt auf hip für linke Seite
+                cv2.circle(image, tuple(np.multiply(left_hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+
+            else:
+                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+
+
+        except:
+            pass
