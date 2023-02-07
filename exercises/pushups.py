@@ -35,73 +35,72 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
     cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
+    if resultsPose.pose_landmarks:
+        try:
+            landmarks = resultsPose.pose_landmarks.landmark
+            
+            # wenn Ellbogen und Knee zu 50% sicher erkennbar sind
+            if landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].visibility > 0.5 and landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility > 0.5:
 
-    try:
-        landmarks = resultsPose.pose_landmarks.landmark
+                # elbow, shoulder, hip 
+                elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+                wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+                knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
 
-        # elbow, shoulder, hip 
-        elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-        shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-        hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-        wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
-        knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+                # calculate angle
+                elbow_angle = calculate_angle(wrist, elbow, shoulder)
+                shoulder_angle = calculate_angle(elbow, shoulder, hip)
+                hip_angle = calculate_angle(shoulder, hip, knee)
 
-        # calculate angle
-        elbow_angle = calculate_angle(wrist, elbow, shoulder)
-        shoulder_angle = calculate_angle(elbow, shoulder, hip)
-        hip_angle = calculate_angle(shoulder, hip, knee)
+                # Logik für Pushups
+                if elbow_angle > 160:
+                    stage_pushup = "down"
+                if elbow_angle < 30 and stage_pushup == "down":
+                    stage_pushup = "up"
+                    pushup_counter += 1   
+                        
 
-        # Logik für Pushups
-        if elbow_angle > 160:
-            stage_pushup = "down"
-        if elbow_angle < 30 and stage_pushup == "down":
-            stage_pushup = "up"
-            pushup_counter += 1   
-                 
-    except:
-        pass
+                # Linie zwischen Schulter und Ellenbogen
+                cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 
+                        tuple(np.multiply(elbow, [width, height]).astype(int)), (255, 255, 255), 2)
+                cv2.line(image, tuple(np.multiply(elbow, [width, height]).astype(int)),
+                        tuple(np.multiply(wrist, [width, height]).astype(int)), (255, 255, 255), 2)
+                
+                # Linie zwischen Schulter und Hüfte
+                cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)),
+                        tuple(np.multiply(hip, [width, height]).astype(int)), (255, 255, 255), 2)
+                cv2.line(image, tuple(np.multiply(hip, [width, height]).astype(int)),
+                        tuple(np.multiply(knee, [width, height]).astype(int)), (255, 255, 255), 2)
+                
+                cv2.circle(image, tuple(np.multiply(elbow, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                cv2.circle(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                cv2.circle(image, tuple(np.multiply(hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                cv2.circle(image, tuple(np.multiply(wrist, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                cv2.circle(image, tuple(np.multiply(knee, [width, height]).astype(int)), 5, (0, 0, 255), -1)
 
-    try: 
-        # Linie zwischen Schulter und Ellenbogen
-        cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 
-                tuple(np.multiply(elbow, [width, height]).astype(int)), (255, 255, 255), 2)
-        cv2.line(image, tuple(np.multiply(elbow, [width, height]).astype(int)),
-                tuple(np.multiply(wrist, [width, height]).astype(int)), (255, 255, 255), 2)
-        
-        # Linie zwischen Schulter und Hüfte
-        cv2.line(image, tuple(np.multiply(shoulder, [width, height]).astype(int)),
-                tuple(np.multiply(hip, [width, height]).astype(int)), (255, 255, 255), 2)
-        cv2.line(image, tuple(np.multiply(hip, [width, height]).astype(int)),
-                tuple(np.multiply(knee, [width, height]).astype(int)), (255, 255, 255), 2)
-        
-        cv2.circle(image, tuple(np.multiply(elbow, [width, height]).astype(int)), 5, (0, 0, 255), -1)
-        cv2.circle(image, tuple(np.multiply(shoulder, [width, height]).astype(int)), 5, (0, 0, 255), -1)
-        cv2.circle(image, tuple(np.multiply(hip, [width, height]).astype(int)), 5, (0, 0, 255), -1)
-        cv2.circle(image, tuple(np.multiply(wrist, [width, height]).astype(int)), 5, (0, 0, 255), -1)
-        cv2.circle(image, tuple(np.multiply(knee, [width, height]).astype(int)), 5, (0, 0, 255), -1)
+                # Zeigt Winkel an
+                cv2.putText(image, str(int(elbow_angle)), tuple(np.multiply(elbow, [width, height]).astype(int)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, str(int(shoulder_angle)), tuple(np.multiply(shoulder, [width, height]).astype(int)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, str(int(hip_angle)), tuple(np.multiply(hip, [width, height]).astype(int)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+                
 
-        # Zeigt Winkel an
-        cv2.putText(image, str(int(elbow_angle)), tuple(np.multiply(elbow, [width, height]).astype(int)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(image, str(int(shoulder_angle)), tuple(np.multiply(shoulder, [width, height]).astype(int)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.putText(image, str(int(hip_angle)), tuple(np.multiply(hip, [width, height]).astype(int)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        
+                # Zeigt Anzahl der Pushups an
+                cv2.putText(image, str(pushup_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, str(pushup_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
-       # Zeigt Anzahl der Pushups an
-        cv2.putText(image, str(pushup_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-        cv2.putText(image, str(pushup_counter), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+                # Zeigt Richtung an
+                cv2.putText(image, stage_pushup, (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(image, stage_pushup, (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
 
-        # Zeigt Richtung an
-        cv2.putText(image, stage_pushup, (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3, cv2.LINE_AA)
-        cv2.putText(image, stage_pushup, (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 1, cv2.LINE_AA)
+            else:
+                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+                cv2.putText(image, "Keine Person erkannt", (int(width/4), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
-
-        
-
-
-
-    except:
-        pass
+        except:
+            pass
 
