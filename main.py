@@ -179,8 +179,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
 
                 # wenn in Übung - 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
                 if currentFinger == 5:
-                    cv2.putText(image, "Reset", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Reset", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (100, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     
                     if passedTime > 3:
                         if state == 1:
@@ -197,29 +197,29 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
-                    cv2.putText(image, "Curl starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Curl starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Curl starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Curl starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 1
 
                 # wenn 2 Finger erkannt werden und state = 0 ist
                 if currentFinger == 2 and state == 0:
-                    cv2.putText(image, "Situps starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Situps starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Situps starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Situps starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 2
 
                 # wenn 3 Finger erkannt werden und state = 0 ist
                 if currentFinger == 3 and state == 0:
-                    cv2.putText(image, "Squats starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Squats starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Squats starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Squats starten in", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 3
                 
                 # wenn 4 Finger erkannt werden und state = 0 ist
                 if currentFinger == 4 and state == 0:
-                    cv2.putText(image, "Pushups starten in ", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Pushups starten in ", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Pushups starten in ", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Pushups starten in ", (10, int(height)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 4
 
