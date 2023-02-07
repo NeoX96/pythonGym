@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
+from .preview.video import video_preview
 
 # counter variables for squat exercise
 squats_counter = 0
 stage_squats = None
+video_cap = cv2.VideoCapture("exercises\preview\squats.mp4")
+state_video_squat = False
 
 def reset_squats():
     global squats_counter, stage_squats
@@ -11,6 +14,14 @@ def reset_squats():
     stage_squats = None
 
 def squats(image, resultsPose, mp_pose, calculate_angle, width, height):
+    """
+        Übungslogik und Animation für Kniebeugen
+    """
+
+    if state_video_squat == False:
+        video_preview(video_cap, image, width, height)
+
+
 
     # Zeigt Name mittig oben an
     cv2.putText(image, "Squats", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)

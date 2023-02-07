@@ -1,46 +1,15 @@
 import cv2                              # OpenCV 
 import numpy as np                      # Numpy 
-import time 
-
-
-#Lade das Video
-# cap = cv2.VideoCapture("exercises\pexels-rodnae-productions-8401327.mp4")
-# 
-# 
-# start_time = cv2.getTickCount()
-# 
-# while True:
-#     ret, frame = cap.read()
-#     if not ret:
-#         break
-# 
-#     elapsed_time = (cv2.getTickCount() - start_time) / cv2.getTickFrequency()
-#     if elapsed_time > 3:
-#         break
-#     
-# 
-#     #Zeitanzeige 3 Sekunden 
-#     font = cv2.FONT_HERSHEY_SIMPLEX
-#     text = ' {:.0f} sec'.format(elapsed_time)
-#     cv2.putText(frame, text, (frame.shape[1]//2, frame.shape[0]//2), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
-#     
-#     cv2.imshow("Video", frame)
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-# 
-# 
-# cv2.imshow('Mediapipe Situp Feed', image)
-# time.sleep(3)
-
+from .preview.video import video_preview
 
 
 # Zählvariablen für Situps
 left_counter_situps = 0 
 right_counter_situps = 0
 stage_situps = None
-
-#Zähler variable
 situp_count = 0
+
+# auslesen des Videos
 video_cap = cv2.VideoCapture("exercises\preview\situps.mp4")
 state_video_situp = False
 
@@ -53,29 +22,16 @@ def reset_situps():
 
 #. Funktion für Curl-Übung die in main.py aufgerufen wird
 def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
+    """
+        Übungslogik und Animation für Situps
+    """
+
+
     global state_video_situp
 
     if state_video_situp == False:
-        start_time = time.time()
-        while video_cap.isOpened():
-            ret, frame = video_cap.read()
-            if ret:
-                cv2.imshow("PythonGym", frame)
-
-            elapsed_time = time.time() - start_time
-            elapsed_time = int(round(elapsed_time, 2))
-            cv2.putText(frame, str(elapsed_time), (int(width/2), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-
-
-            # if waitkey oder elapsed time > 3
-            if cv2.waitKey(1) & 0xFF == ord('q') or elapsed_time > 3:
-                video_cap.release()
-                break
+        video_preview(video_cap, image, width, height)
         
-        cv2.imshow("PythonGym", image)
-        video_cap.release()
-
 
 
     global stage_situps, left_counter_situps, right_counter_situps, situp_count

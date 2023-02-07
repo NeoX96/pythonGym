@@ -1,22 +1,41 @@
 import cv2
 import numpy as np
+from .preview.video import video_preview
 
 # counter variables for pushups exercise
 pushup_counter = 0
 stage_pushup = None
+
+# auslesen des Videos
+video_cap = cv2.VideoCapture("exercises\preview\pushups.mp4")
+state_video_pushup = False
 
 def reset_pushups():
     global pushup_counter, stage_pushup
     pushup_counter = 0
     stage_pushup = None
 
-# Funktion für die Liegestüzübung die in der main.py aufgerufen wird
-def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
-    global pushup_counter, stage_pushup
 
-     #. Zeigt Name der Übung an
-    cv2.putText(image, 'Pushups', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3, cv2.LINE_AA)
-    cv2.putText(image, 'Pushups', (360,25), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
+    """ 
+        Übungslogik und Animation für Liegestützen
+    """
+
+    # Zeige Video an
+    global state_video_pushup
+
+    if state_video_pushup == False:
+        video_preview(video_cap, image, width, height)
+
+
+
+
+    global pushup_counter, stage_pushup
+    #. Zeigt Name der Übung an
+    cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+    cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
+
+
     try:
         landmarks = resultsPose.pose_landmarks.landmark
 

@@ -1,6 +1,7 @@
 # PythomGym/exercises/curls.py
 import cv2                              # OpenCV 
 import numpy as np                      # Numpy 
+from .preview.video import video_preview
 
 
 # Zählvariablen für Curl-Übung
@@ -9,6 +10,10 @@ right_counter_curls = 0
 
 left_stage_curls = None
 right_stage_curls = None
+
+# auslesen des Videos
+video_cap = cv2.VideoCapture("exercises\preview\curls.mp4")
+state_video_curl = False
 
 # Zurücksetzen der Zählvariablen für Curl-Übung
 def reset_curls():
@@ -22,6 +27,14 @@ def reset_curls():
 
 # Funktion für Curl-Übung die in main.py aufgerufen wird
 def curl(image, results, mp_pose, calculate_angle, width, height):
+    """
+        Übungslogik und Animation für Bizeps-Curls
+    """
+
+    # Zeige Video an
+    if state_video_curl == False:
+        video_preview(video_cap, image, width, height)
+
     
     global left_counter_curls, right_counter_curls, left_stage_curls, right_stage_curls
 
