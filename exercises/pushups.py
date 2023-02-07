@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from .preview.video import video_preview
 
-# counter variables for pushups exercise
+# Zählvariablen für Pushups
 pushup_counter = 0
 stage_pushup = None
 
@@ -10,12 +10,14 @@ stage_pushup = None
 video_cap = cv2.VideoCapture("exercises\preview\pushups.mp4")
 state_video_pushup = False
 
+# Zustand für Pushups zurückzusetzen
 def reset_pushups():
     global pushup_counter, stage_pushup
     pushup_counter = 0
     stage_pushup = None
 
 
+# Funktion für die Liegestützübung die in der main.py aufgerufen wird
 def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
     """ 
         Übungslogik und Animation für Liegestützen
@@ -31,6 +33,7 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
     global pushup_counter, stage_pushup
+    
     #. Zeigt Name der Übung an
     cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
     cv2.putText(image, "Pushups", (int(width/2), 30), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
@@ -39,22 +42,22 @@ def pushups(image, resultsPose, mp_pose, calculate_angle, width, height):
     try:
         landmarks = resultsPose.pose_landmarks.landmark
 
-        # elbow, shoulder, hip 
+         # Definiert die Koordinaten(x,y) von Ellenbogen, Schulter, Hüfte,Handgelenk und Knie 
         elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
         shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
         hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x, landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
         wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
         knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
 
-        # calculate angle
+         # brechnet die Winkel zwischen drei Punkten (Handgelenk, Ellbogen,Schulter) (ellbogen, Schulter, Hüfte) und (Schülter, Hüfte, Knie)
         elbow_angle = calculate_angle(wrist, elbow, shoulder)
         shoulder_angle = calculate_angle(elbow, shoulder, hip)
         hip_angle = calculate_angle(shoulder, hip, knee)
 
         # Logik für Pushups
-        if elbow_angle > 160:
-            stage_pushup = "down"
-        if elbow_angle < 30 and stage_pushup == "down":
+        if elbow_angle > 160 and hip_angle > 140 and hip_angle < 190:
+                stage_pushup = "down"
+        if elbow_angle < 120 and stage_pushup == "down" and hip_angle > 140 and hip_angle <190:
             stage_pushup = "up"
             pushup_counter += 1   
                  
