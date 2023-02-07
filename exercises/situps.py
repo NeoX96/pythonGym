@@ -76,12 +76,11 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
                 #. Zeigt Winkel für Sit-Ups an Hüfte an
                 cv2.putText(image, str(round(right_angle_situps,1)), 
-                            tuple(np.multiply(right_knee, [width, height]).astype(int)), 
+                            tuple(np.multiply(right_angle_situps, [width, height]).astype(int)), 
                             cv2.FONT_HERSHEY_DUPLEX, 0.5, (0, 0, 0), 3, cv2.LINE_AA)
                 cv2.putText(image, str(round(right_angle_situps,1)), 
-                            tuple(np.multiply(right_knee, [width, height]).astype(int)), 
+                            tuple(np.multiply(right_angle_situps, [width, height]).astype(int)), 
                             cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
-
 
                 
 
@@ -100,8 +99,8 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
                 
 
                 # Zeichnet die Stages
-                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
-                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
+                cv2.putText(image, "Stage: " + str(stage_situps), (width-200, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+                cv2.putText(image, "Stage: " + str(stage_situps), (width-200, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
 
 
                 # Zeichnet lininen für linke Seite 

@@ -8,7 +8,7 @@ from exercises.squats import squats, reset_squats
 from exercises.pushups import pushups, reset_pushups
 from angle import calculate_angle
 
-state = 0
+state = 2
 start_time = time.time()
 currentFinger = 0
 fingerCount = 0
