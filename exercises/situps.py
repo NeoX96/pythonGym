@@ -114,15 +114,22 @@ def situp(image, resultsPose, mp_pose, calculate_angle, width, height):
 
 
                 # Zeichnet die Wiederholungen
-                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+                cv2.putText(image, "Count: " + str(situp_count), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
+                
 
                 # Zeichnet die Stages
-                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+                cv2.putText(image, "Stage: " + str(stage_situps), (660, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
+
 
                 # Zeichnet die Winkel für linke Seite
                 cv2.putText(image, str(left_angle_situps),
                     tuple(np.multiply(left_hip, [width+100, height-70]).astype(int)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(image, str(left_angle_situps),
+                    tuple(np.multiply(left_hip, [width+100, height-70]).astype(int)),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1, cv2.LINE_AA)
                 
 
                 # Zeichnet lininen für linke Seite 
