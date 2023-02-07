@@ -12,9 +12,12 @@ state = 0
 start_time = time.time()
 currentFinger = 0
 fingerCount = 0
+combined_image = None
+
 
 # Video Capture
 cap = cv2.VideoCapture(0)
+overlay = cv2.imread("exercises\preview\steuerung.png")
 
 
 # liest die Breite und Höhe der Kamera
@@ -248,7 +251,13 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
                 pass
             
             # imshow
-            cv2.imshow('PythonGym', image)
+            if state == 0:
+                overlay = cv2.resize(overlay, (image.shape[1], image.shape[0]))
+                combined_image = cv2.addWeighted(image, 0.2, overlay, 1, 0)
+                if combined_image is not None:
+                    cv2.imshow('PythonGym', combined_image)
+            else:
+                cv2.imshow('PythonGym', image)
     
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 cap.release()
