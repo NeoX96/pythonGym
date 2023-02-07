@@ -122,7 +122,7 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                     cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
                 cv2.putText(image, str(left_stage_curls), 
                     tuple(np.multiply(left_elbow, [width-100, height+80]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,0), 1, cv2.LINE_AA) 
+                    cv2.FONT_HERSHEY_DUPLEX, 2, (255,255,255), 1, cv2.LINE_AA) 
 
 
                 # Zeigt Anweisung auf rechter Seite an
@@ -131,7 +131,7 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                     cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
                 cv2.putText(image, str(right_stage_curls), 
                     tuple(np.multiply(right_elbow, [width-100, height+80]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,0), 1, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_DUPLEX, 2, (255,255,255), 1, cv2.LINE_AA)
 
                         
                 # Zeigt Counter für linke Seite an
@@ -140,7 +140,7 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                     cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
                 cv2.putText(image, str(left_counter_curls),
                     tuple(np.multiply(left_shoulder, [width+100, height-70]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,255), 2, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_DUPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
                 
                 
                 # Zeigt Counter für rechte Seite an
@@ -149,7 +149,7 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                     cv2.FONT_HERSHEY_DUPLEX, 2, (0,0,0), 3, cv2.LINE_AA)
                 cv2.putText(image, str(right_counter_curls),
                     tuple(np.multiply(right_shoulder, [width-250, height-70]).astype(int)), 
-                    cv2.FONT_HERSHEY_DUPLEX, 2, (0,255,255), 2, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_DUPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
                 
                 # zeichnet kreise um Ellbogen
                 cv2.circle(image, tuple(np.multiply(left_elbow, [width, height]).astype(int)), 5, (0, 0, 0), -1, cv2.LINE_AA)
@@ -170,10 +170,10 @@ def curl(image, resultsPose, mp_pose, calculate_angle, width, height):
                 cv2.circle(image, tuple(np.multiply(right_wrist, [width, height]).astype(int)), 5, (255, 255, 255), 2, cv2.LINE_AA)
 
                 # Balken für linke Seite
-                cv2.rectangle(image, (25, height-left_bar_height), (75, height), (0,255,0), -1)
+                cv2.rectangle(image, (25, height-left_bar_height), (75, height), (255,255,0), -1)
 
                 # Balken für rechte Seite
-                cv2.rectangle(image, (width-75, height-right_bar_height), (width-25, height), (0, 255, 0), -1)
+                cv2.rectangle(image, (width-75, height-right_bar_height), (width-25, height), (255, 255, 0), -1)
 
 
 
