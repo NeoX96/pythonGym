@@ -142,33 +142,36 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
                     x2 = int(width/2 + bar_width/2)
 
                     # Y-Koordinate für die obere Kante des Balkens
-                    bar_y = height - 20
+                    bar_y = height - 30
 
-                    # Vollständigen Balken zeichnen (rote Farbe)
-                    cv2.rectangle(image, (x1, bar_y), (x2, height), (0, 0, 255), -1)
+                    # Vollständigen Balken zeichnen (weiße Farbe)
+                    cv2.rectangle(image, (x1, bar_y), (x2, height), (255, 255, 255), -1)
 
-                    # Zeichne einen Kreis, um die eckige Form des Balkens zu verdecken (grüne Farbe)
-                    # Balken zeichnen, der die verstrichene Zeit darstellt (grüne Farbe)
-                    cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (0, 255, 0), -1)
-                    cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/3)), height), (0, 255, 0), -1)
+                    # Zeichne einen Kreis, um die eckige Form des Balkens zu verdecken (türkis Farbe)
+                    # Balken zeichnen, der die verstrichene Zeit darstellt (türkis Farbe)
+                    #cv2.circle(image, (x1 + int(bar_width*(passedTime/3)), bar_y + 10), 10, (255, 255, 0), -1)
+                    cv2.rectangle(image, (x1, bar_y), (x1 + int(bar_width*(passedTime/2)), height), (255, 255, 0), -1)
 
                     # set timer text in the middle of the bar 3 - passed time
-                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 3, cv2.LINE_AA)
-                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, str(int(3.99 - passedTime)), (int(width/2), bar_y + 19), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 3, cv2.LINE_AA)
 
+                    # schwarze Balken 
+                    cv2.rectangle(image, (width - bar_width, height - 30), (width, height), (0, 0, 0), -1)
+                    cv2.rectangle(image, (width - bar_width*4, height - 30), (width - bar_width*2, height), (0, 0, 0), -1)
 
                 # wenn Zeit größer als 3 Sekunden ist und 10 Finger erkannt werden, wird der state auf 0 gesetzt
                 if currentFinger == 10:
                     if state > 0:
-                        cv2.putText(image, "Back", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                        cv2.putText(image, "Back", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100,int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Back", (100,int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
                         if passedTime > 3:
                             state = 0
                             passedTime = 0
                             start_time = time.time()
                     if state == 0:
-                        cv2.putText(image, "Exit", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                        cv2.putText(image, "Exit", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+                        cv2.putText(image, "Exit", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                        cv2.putText(image, "Exit", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2, cv2.LINE_AA)
                         if passedTime > 3:
                             cap.release()
                             cv2.destroyAllWindows()
@@ -176,8 +179,8 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
 
                 # wenn in Übung - 5 Finger erkannt werden, wird Reset angezeigt und nach 3 Sekunden Variablen zurückgesetzt
                 if currentFinger == 5:
-                    cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Reset", (int(width/2), 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,140,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Reset", (100, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     
                     if passedTime > 3:
                         if state == 1:
@@ -194,29 +197,29 @@ with mp.solutions.hands.Hands(min_detection_confidence=0.6, min_tracking_confide
 
                 # wenn 1 Finger erkannt wird und state = 0 ist
                 if currentFinger == 1 and state == 0:
-                    cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Curl", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Curl starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Curl starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 1
 
                 # wenn 2 Finger erkannt werden und state = 0 ist
                 if currentFinger == 2 and state == 0:
-                    cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Situps", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Situps starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Situps starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 2
 
                 # wenn 3 Finger erkannt werden und state = 0 ist
                 if currentFinger == 3 and state == 0:
-                    cv2.putText(image, "Squats", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Squats", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Squats starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Squats starten in", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 3
                 
                 # wenn 4 Finger erkannt werden und state = 0 ist
                 if currentFinger == 4 and state == 0:
-                    cv2.putText(image, "Pushups", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 4, cv2.LINE_AA)
-                    cv2.putText(image, "Pushups", (50, int(height/2)+50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+                    cv2.putText(image, "Pushups starten in ", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,0), 4, cv2.LINE_AA)
+                    cv2.putText(image, "Pushups starten in ", (10, int(height/2)+235), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2, cv2.LINE_AA)
                     if passedTime > 3:
                         state = 4
 
