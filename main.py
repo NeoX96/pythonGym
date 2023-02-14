@@ -9,7 +9,6 @@ from exercises.pushups import pushups, reset_pushups
 from angle import calculate_angle
 
 state = 0
-state = 0
 start_time = time.time()
 currentFinger = 0
 fingerCount = 0
